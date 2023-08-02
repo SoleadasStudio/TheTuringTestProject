@@ -5,49 +5,28 @@ using UnityEngine.AI;
 
 public class Agents : MonoBehaviour
 {
-    public NavMeshAgent _agent;
+    [SerializeField] public Transform[] targetPoints;
+    [SerializeField] public Transform agentEye;
+    [SerializeField] public float playerCheckDistance;
+    [SerializeField] public float checkRadius = .04f;
 
-    public Transform _targetPoint;
+    private int currentTarget = 0;
 
-    [SerializeField] public Transform[] _targetPoints;
-
-    [SerializeField] public Transform _agentEye;
-
-
-    [SerializeField] public float _playerCheckDistance;
-
-    [SerializeField] public float _checkRadius = .04f;
-
-
-    int currentTarget = 0;
-
-
+    public NavMeshAgent agent;
+    public Transform targetPoint;
     public bool isIdle = true;
-
-
     public bool isPlayerFound;
-
-
     public bool isCloseToPlayer;
-
-
     public Transform _player;
-
-
 
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.destination = _targetPoints[currentTarget].position;
-
-
+        agent = GetComponent<NavMeshAgent>();
+        agent.destination = targetPoints[currentTarget].position;
     }
 
-
-    void Update()
+    private void Update()
     {
-        // _agent.destination = _targetPoint.position;
-
         if (isIdle)
         {
             Idle();
@@ -63,40 +42,36 @@ public class Agents : MonoBehaviour
                 FollowPlayer();
             }
         }
-
     }
 
-    void Idle()
+    private void Idle()
     {
-
-        if (_agent.remainingDistance < 0.1f)
+        if (agent.remainingDistance < 0.1f)
         {
-
             currentTarget++;
-            if (currentTarget >= _targetPoints.Length)
+            if (currentTarget >= targetPoints.Length)
             {
                 currentTarget = 0;
 
             }
-            _agent.destination = _targetPoints[currentTarget].position;
+            agent.destination = targetPoints[currentTarget].position;
         }
 
-        if (Physics.SphereCast(_agentEye.position, _checkRadius, transform.forward, out RaycastHit hit, _playerCheckDistance))
+        if (Physics.SphereCast(agentEye.position, checkRadius, transform.forward, out RaycastHit hit, playerCheckDistance))
         {
             if (hit.transform.CompareTag("Player"))
             {
-                Debug.Log("Player Found!!!!");
+                Debug.Log("Player Found!");
                 isIdle = false;
                 isPlayerFound = true;
                 _player = hit.transform;
-                _agent.destination = _player.position;
+                agent.destination = _player.position;
 
             }
         }
-
     }
 
-    void FollowPlayer()
+    private void FollowPlayer()
     {
         if (_player != null)
         {
@@ -108,7 +83,7 @@ public class Agents : MonoBehaviour
             {
                 isCloseToPlayer = false;
             }
-            _agent.destination = _player.position;
+            agent.destination = _player.position;
         }
         else
         {
@@ -118,25 +93,23 @@ public class Agents : MonoBehaviour
         }
     }
 
-    void AttackPlayer()
+    private void AttackPlayer()
     {
-
-        Debug.Log("PLAYER ATTACKED!!");
-
-
+        Debug.Log("Player Attacked!");
         if (Vector3.Distance(transform.position, _player.position) > 2)
         {
             isCloseToPlayer = false;
         }
-
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_agentEye.position, _checkRadius);
-        Gizmos.DrawWireSphere(_agentEye.position + _agentEye.forward * _playerCheckDistance, _checkRadius);
 
-        Gizmos.DrawLine(_agentEye.position, _agentEye.position + _agentEye.forward * _playerCheckDistance);
+        Gizmos.DrawWireSphere(agentEye.position, checkRadius);
+        Gizmos.DrawWireSphere(agentEye.position + agentEye.forward * playerCheckDistance, checkRadius);
+
+        Gizmos.DrawLine(agentEye.position, agentEye.position + agentEye.forward * playerCheckDistance);
     }
+    
 }

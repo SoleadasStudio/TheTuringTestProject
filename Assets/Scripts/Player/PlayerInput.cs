@@ -21,8 +21,6 @@ public class PlayerInput : MonoBehaviour
 
     public bool mousePress { get; private set; }
 
-    //public bool _luanchPress2 { get; private set; }
-
     public bool launcher1Pressed { get; private set; }
 
     public bool launcher2Pressed { get; private set; }
@@ -32,11 +30,7 @@ public class PlayerInput : MonoBehaviour
     public bool undoPressed { get; private set; }
 
 
-
-
-
     /// Singleton Pattern
-
     private static PlayerInput instance;
 
 
@@ -57,7 +51,6 @@ public class PlayerInput : MonoBehaviour
         return instance;
     }
 
-
     ///End Singleton
 
     private void Start()
@@ -66,9 +59,6 @@ public class PlayerInput : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = true;
     }
-
-
-
 
     // Update is called once per frame
     void Update()
@@ -87,15 +77,12 @@ public class PlayerInput : MonoBehaviour
         activatedPress = Input.GetKeyDown(KeyCode.E);
 
         mousePress = Input.GetButtonDown("Fire1");
-        // _luanchPress2 = Input.GetButtonDown("Fire2");
 
-
-        //Assign luancher based on number key pressed
+        //Assign launcher based on number key pressed
         launcher1Pressed = Input.GetKeyDown(KeyCode.Alpha1);
         launcher2Pressed = Input.GetKeyDown(KeyCode.Alpha2);
 
         commandPressed = Input.GetKeyDown(KeyCode.C);
         undoPressed = Input.GetKeyDown(KeyCode.Z);
-
     }
 }

@@ -8,29 +8,34 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Movement")]
     [SerializeField] private float turnSpeed;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float gravity = -9.8f;
+    [SerializeField] private float jumpForce;
+
+    [SerializeField] private bool invertedMouseCheck;
 
     [SerializeField] private Transform cameraTransform;
-    [SerializeField] private bool invertedMouseCheck;
+   
+    private PlayerInput input;
 
     private float mouseX, mouseY;
     private float horizontal, vertical;
-    private CharacterController _characterController;
     private float cameraXRotation;
 
-    [SerializeField] private float gravity = -9.8f;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private PlayerInput input;
+    private CharacterController _characterController;
     private Vector3 playerVelocity;
 
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+
+        input = PlayerInput.GetInstance();
     }
 
     void Update()
     {
         RotatePlayer();
         MovePlayer();
+        Jump();
     }
 
     private void Jump()
@@ -60,10 +65,11 @@ public class PlayerMovement : MonoBehaviour
     private void RotatePlayer()
     {
         //Turn side to side
-        transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime * mouseX);
+        transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime * input.mouseX);
 
         //Turn head up and down
-        cameraXRotation += Time.deltaTime * mouseY * turnSpeed * (invertedMouseCheck ? 1 : -1);
+        cameraXRotation += Time.deltaTime * input.mouseY * turnSpeed * (invertedMouseCheck ? 1 : -1);
+
         cameraXRotation = Mathf.Clamp(cameraXRotation, -85, 85);
 
         cameraTransform.localRotation = Quaternion.Euler(cameraXRotation, 0, 0);

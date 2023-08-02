@@ -4,53 +4,48 @@ using UnityEngine;
 
 public class PlayerLaunchProjectile : MonoBehaviour
 {
-    [SerializeField] private GameObject orangeProjectile;
-    [SerializeField] private GameObject blueProjectile;
-    [SerializeField] private GameObject spawnPoint;
+    [SerializeField] public GameObject orangeProjectile;
+    [SerializeField] public GameObject blueProjectile;
+    [SerializeField] public GameObject spawnPoint;
+    [SerializeField] public ObjectPool bulletPool;
+    [SerializeField] public ObjectPool bulletPool2;
+
     [SerializeField] private float shootVelocity;
     [SerializeField] private float finalShootVelocity;
 
     private PlayerInput input;
-   // private IShootStrategy currentShootStrategy;
-
-
-    //Added refernce to objectpool
-    //[SerializeField] public ObjectPool _bulletPool;
-
-    ////Added refernce to objectpool
-    //[SerializeField] public ObjectPool _bulletPool2;
+    private IShootStrategy currentShootStrategy;
 
     void Start()
     {
         input = PlayerInput.GetInstance();
     }
 
-    // Update is called once per frame
     void Update()
     {
-       // Interact();
+        Interact();
     }
 
-    //public void Interact()
-    //{
-    //    if (currentShootStrategy == null)
-    //    {
-    //        currentShootStrategy = new RedShootStrategy(this);
-    //    }
-    //    if (input.launcher1Pressed)
-    //    {
-    //        currentShootStrategy = new RedShootStrategy(this);
-    //    }
-    //    if (input.launcher2Pressedd)
-    //    {
-    //        currentShootStrategy = new YellowShootStrategy(this);
-    //    }
+    public void Interact()
+    {
+        if (currentShootStrategy == null)
+        {
+            currentShootStrategy = new OrangeShootStrategy(this);
+        }
+        if (input.launcher1Pressed)
+        {
+            currentShootStrategy = new OrangeShootStrategy(this);
+        }
+        if (input.launcher2Pressed)
+        {
+            currentShootStrategy = new BlueShootStrategy(this);
+        }
 
-    //    //
-    //    if (input.mousePress && currentShootStrategy != null)
-    //    {
-    //        currentShootStrategy.Shoot();
-    //    }
+        //
+        if (input.mousePress && currentShootStrategy != null)
+        {
+            currentShootStrategy.Shoot();
+        }
 
-    //}
+    }
 }
