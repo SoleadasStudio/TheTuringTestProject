@@ -10,7 +10,7 @@ public class BlueShootStrategy : IShootStrategy
     //Constructor
     public BlueShootStrategy(PlayerLaunchProjectile launchInteractor)
     {
-        Debug.Log("Changed To Orange Projectile Mode");
+        Debug.Log("Changed To Blue Projectile Mode");
         this.launchInteractor = launchInteractor;
         shootPoint = launchInteractor.spawnPoint.transform;
 
@@ -20,7 +20,7 @@ public class BlueShootStrategy : IShootStrategy
 
     public void Shoot()
     {
-        PooledObject projectile = launchInteractor.bulletPool.GetPooledObject();
+        PooledObject projectile = launchInteractor.bulletPool2.GetPooledObject();
         projectile.gameObject.SetActive(true);
         projectile.transform.position = launchInteractor.spawnPoint.transform.position;
         projectile.transform.rotation = launchInteractor.spawnPoint.transform.rotation;

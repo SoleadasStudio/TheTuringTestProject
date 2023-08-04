@@ -10,7 +10,6 @@ public class OrangeShootStrategy : IShootStrategy
     //Constructor
     public OrangeShootStrategy(PlayerLaunchProjectile launchInteractor)
     {
-        Debug.Log("Changed To Orange Projectile Mode");
         this.launchInteractor = launchInteractor;
         shootPoint = launchInteractor.spawnPoint.transform;
 
@@ -18,13 +17,22 @@ public class OrangeShootStrategy : IShootStrategy
         launchInteractor.spawnPoint.gameObject.GetComponentInParent<MeshRenderer>().material.color = launchInteractor.orangeProjectile.GetComponent<MeshRenderer>().sharedMaterial.color;
     }
 
+
     public void Shoot()
     {
         PooledObject projectile = launchInteractor.bulletPool.GetPooledObject();
         projectile.gameObject.SetActive(true);
         projectile.transform.position = launchInteractor.spawnPoint.transform.position;
-        projectile.transform.rotation = launchInteractor.spawnPoint.transform.rotation;
-        projectile.GetComponent<Rigidbody>().AddForce(launchInteractor.spawnPoint.transform.forward * 1000);
+
+        // Calculate the shooting direction
+        Vector3 shootingDirection = Quaternion.Euler(-30, 0, 0) * launchInteractor.spawnPoint.transform.forward;
+
+        // Apply the direction to the projectile
+        projectile.transform.rotation = Quaternion.LookRotation(shootingDirection);
+
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        rb.AddForce(shootingDirection * 1000);
+
         launchInteractor.bulletPool.DestroyPooledObject(projectile, 5.0f);
     }
 }

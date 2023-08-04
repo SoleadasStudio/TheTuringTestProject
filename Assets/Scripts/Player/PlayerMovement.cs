@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         //Turn head up and down
         cameraXRotation += Time.deltaTime * input.mouseY * turnSpeed * (invertedMouseCheck ? 1 : -1);
 
-        cameraXRotation = Mathf.Clamp(cameraXRotation, -85, 85);
+        cameraXRotation = Mathf.Clamp(cameraXRotation, -60, 40);
 
         cameraTransform.localRotation = Quaternion.Euler(cameraXRotation, 0, 0);
     }

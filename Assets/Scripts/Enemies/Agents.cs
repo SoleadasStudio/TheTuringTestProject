@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Agents : MonoBehaviour
 {
+    //state design pattern
+
     [SerializeField] public Transform[] targetPoints;
     [SerializeField] public Transform agentEye;
     [SerializeField] public float playerCheckDistance;
